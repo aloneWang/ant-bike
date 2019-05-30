@@ -113,6 +113,7 @@ module.exports = function(webpackEnv) {
         loader: require.resolve(preProcessor),
         options: {
           sourceMap: isEnvProduction && shouldUseSourceMap,
+          javascriptEnabled: true,
         },
       });
     }
@@ -323,6 +324,17 @@ module.exports = function(webpackEnv) {
           // match the requirements. When no loader matches it will fall
           // back to the "file" loader at the end of the loader list.
           oneOf: [
+            {
+              test: lessRegex,
+              exclude:lessModuleRegex,
+              use: getStyleLoaders(
+                {
+                  importLoaders: 2,
+                  sourceMap: isEnvProduction && shouldUseSourceMap,
+                },
+                'less-loader'
+              )
+            },
             // "url" loader works like "file" loader except that it embeds assets
             // smaller than specified limit in bytes as data URLs to avoid requests.
             // A missing `test` is equivalent to a match.
@@ -346,6 +358,11 @@ module.exports = function(webpackEnv) {
                 ),
                 
                 plugins: [
+                  ["import", {
+                    "libraryName": "antd",
+                    "libraryDirectory": "es",
+                    "style": true // `style: true` 会加载 less 文件
+                  }],
                   [
                     require.resolve('babel-plugin-named-asset-import'),
                     {
@@ -440,17 +457,6 @@ module.exports = function(webpackEnv) {
               // Remove this when webpack adds a warning or an error for this.
               // See https://github.com/webpack/webpack/issues/6571
               sideEffects: true,
-            },
-            {
-              test: lessRegex,
-              exclude:lessModuleRegex,
-              use: getStyleLoaders(
-                {
-                  importLoaders: 2,
-                  sourceMap: isEnvProduction && shouldUseSourceMap,
-                },
-                'less-loader'
-              )
             },
             // Adds support for CSS Modules, but using SASS
             // using the extension .module.scss or .module.sass

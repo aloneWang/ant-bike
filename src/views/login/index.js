@@ -2,8 +2,6 @@ import React,{ Component } from 'react'
 import { Card, Form, Input, Button, message, Icon, Checkbox } from 'antd'
 
 import './login.scss'
-import '@/assets/css/common.less'
-import '@/assets/css/default.less'
 class Login extends Component {
   
   render() {
@@ -64,7 +62,7 @@ class Login extends Component {
                         <a href="#/login" style={{ float: 'right' }}>忘记密码</a>
                       </Form.Item>
                       <Form.Item>
-                        <Button type="primary" block onClick={()=>{alert(11111)}}></Button>
+                        <Button type="primary" block onClick={()=>{alert(11111)}}>登陆</Button>
                       </Form.Item>
                     </Form>
                   </Card>
