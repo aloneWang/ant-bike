@@ -1,5 +1,9 @@
+// 只展示数据接口
 import axios from './axios'
 
-export const login = (data) => {
-  axios.post('/login', data)
+export const LOGIN =  async (data) => {
+  const res = await axios.post('/login', data)
+  
+  return res.data
+
 }
