@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Row, Col } from 'antd'
 import moment from 'moment'
-import { api_get_weather } from '@/api'
+import { apiGetWeather } from '@/api'
 import './index.less'
 
 class Header extends Component {
@@ -19,7 +19,7 @@ class Header extends Component {
 
   async getWeather() {
     let city = this.state.city
-    const res =   await api_get_weather(city)
+    const res =   await apiGetWeather(city)
     this.setState({
       weather_data: res.results[0].weather_data[0]
     })

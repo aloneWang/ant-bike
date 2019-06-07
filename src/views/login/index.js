@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom'
 import { Card, Form, Input, Button, message, Icon, Checkbox } from 'antd'
 import { setToken } from '@/store/actionCreate'
 import * as actionType from '@/store/actionType'
-import { LOGIN } from '@/api'
+import { apiLogin } from '@/api'
 
 import './login.scss'
 class Login extends Component {
@@ -15,7 +15,7 @@ class Login extends Component {
 
    this.props.form.validateFields( async (err) => {
     if(!err){
-      const res = await LOGIN()
+      const res = await apiLogin()
       
       dispatch(setToken(res.result.data.token))
     }

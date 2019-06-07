@@ -7,6 +7,7 @@ import { Login } from '@/asyncLoading'
 import Home from '@/views/home'
 import FormLogin from '@/views/form/login'
 import FormRegister from '@/views/form/register'
+import BasicTable from '@/views/table/basicTable'
 // import Buttons from '@/views/ui/buttons'
 // import Modals from '@/views/ui/modals'
 import UI from '@/views/ui/'
@@ -33,6 +34,7 @@ class Router extends Component {
                 <Route path="/ui/carousel" component={ Carousels } />
                 <Route path= "/form/login" component={ FormLogin } />
                 <Route path= "/form/reg" component={ FormRegister } />
+                <Route path="/table/basic" component={ BasicTable } />
                 <Redirect to='/home' />
               </Switch>
             </Admin>
