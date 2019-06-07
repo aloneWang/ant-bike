@@ -110,13 +110,16 @@ class BasicTable extends Component {
   }
   async getTablist(){
     const res = await apiGetTableList()
-    console.log(res)
-    // const dataSource2 = res.result.list.map( item => {
-    //   item.key = item.userName
-    // })
-    // this.setState({
-    //   dataSource2
-    // })
+    if(res.code == 0) {
+      const dataSource2 = res.result.list
+      dataSource2.map(item => {
+        item.key = item.userName
+      })
+      this.setState({
+        dataSource2
+      })
+    }
+    
   }
   render() {
     const { columns, dataSource, dataSource2 } = this.state
