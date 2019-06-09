@@ -145,7 +145,6 @@ class BasicTable extends Component {
   }
 
   handleDelete = ()=>{
-    const _this = this
     const {seleckItems, dataSource2} = this.state
     let isDelete = seleckItems.length > 0 ? true : false
     
@@ -154,7 +153,7 @@ class BasicTable extends Component {
       content: isDelete ? '确定要删除吗' : '请选择要删除的选项',
       onOk:() => {
         // console.log(this.getTablist)
-        // isDelete ? this.getTablist() : false
+        return isDelete ? this.getTablist() : false
       }
     })
     

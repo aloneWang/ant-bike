@@ -1,6 +1,14 @@
 import axios from 'axios'
 import store from '@/store'
 import * as actionType from '@/store/actionType'
+
+
+const setLoading = (status)=>{
+  store.dispatch({
+    type: actionType.SET_LOADING,
+    data: status
+  })
+}
 const instance = axios.create({
   baseURL:'https://www.easy-mock.com/mock/5c4e75d6afd3a07bd7b6ec70/mockapi',
   timeout:5000
@@ -8,18 +16,19 @@ const instance = axios.create({
 
 instance.interceptors.request.use( config => {
   const token = localStorage.getItem('token')
-  store.dispatch({
-    type: actionType.SET_LOADING,
-    data: true
-  })
+  setLoading(true)
 
   if(config.url !== '/login'){
 
-    token ? 
-    (config.headers.common['Authorization'] = token) : store.dispatch({
-      type: actionType.SET_TOKEN,
-      data: null
-    })
+    if(token){
+      config.headers.common['Authorization'] = token
+    } else{
+      store.dispatch({
+        type: actionType.SET_TOKEN,
+        data: null
+      })
+      return Promise.reject("token失效了")
+    }
   }
   return config
 }, err => {
@@ -28,12 +37,10 @@ instance.interceptors.request.use( config => {
 
 instance.interceptors.response.use( res => {
 
-  store.dispatch({
-    type: actionType.SET_LOADING,
-    data: false
-  })
+  setLoading(false)
   return res
 }, err => {
-  Promise.reject(err)
+  setLoading(false)
+  return Promise.reject(err)
 })
 export default instance
