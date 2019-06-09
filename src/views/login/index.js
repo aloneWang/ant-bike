@@ -25,6 +25,7 @@ class Login extends Component {
   render() {
     const { getFieldDecorator } = this.props.form
     const token = this.props.token
+    // const token = localStorage.getItem('token')
     if(token) {
       return (
         <Redirect to="/" />

@@ -18,7 +18,10 @@ class Admin extends Component {
     super(props)
   }
   render() {
+    console.log('admin')
     const token = this.props.token
+    // console.log("监听到")
+    // const token = localStorage.getItem('token')
     if(token){
       return (
         <Row className='container'>

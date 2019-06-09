@@ -8,18 +8,18 @@ const instance = axios.create({
 
 instance.interceptors.request.use( config => {
   const token = localStorage.getItem('token')
-
   store.dispatch({
     type: actionType.SET_LOADING,
     data: true
   })
 
   if(config.url !== '/login'){
+
     token ? 
     (config.headers.common['Authorization'] = token) : store.dispatch({
       type: actionType.SET_TOKEN,
       data: null
-    }) 
+    })
   }
   return config
 }, err => {
@@ -32,7 +32,6 @@ instance.interceptors.response.use( res => {
     type: actionType.SET_LOADING,
     data: false
   })
-
   return res
 }, err => {
   Promise.reject(err)

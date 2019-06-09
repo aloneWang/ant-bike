@@ -2,7 +2,16 @@ import React, { Component } from 'react'
 import { Card, Table, Modal, Button, message } from 'antd'
 import { apiGetTableList } from '@/api'
 
+
 class BasicTable extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      selectedRowKeys: [],
+      selectedRowKeys2:[],
+      seleckItems:[]
+    }
+  }
 
   componentWillMount() {
     const dataSource = [
@@ -98,8 +107,10 @@ class BasicTable extends Component {
         dataIndex: 'time'
       }
     ]
-    
+
     dataSource.map((item) => {
+      // 在做单选被选中的时候一定要与selectedRowKeys匹配一样的东西，要么索引要么值
+      // 这玩意坑了一下午
       item.key = item.userName
     })
     this.getTablist()
@@ -108,9 +119,10 @@ class BasicTable extends Component {
       dataSource,
     })
   }
-  async getTablist(){
+  async getTablist() {
     const res = await apiGetTableList()
-    if(res.code == 0) {
+ 
+    if (res && res.code == 0) {
       const dataSource2 = res.result.list
       dataSource2.map(item => {
         item.key = item.userName
@@ -119,10 +131,56 @@ class BasicTable extends Component {
         dataSource2
       })
     }
+
+  }
+  onRowClick = record => { //record 当前数据 index 索引
+    this.setState(() => ({
+      selectedRowKeys: record.userName, // 当前选中的索引
+    }))
+
+    Modal.info({
+      title: '当前用户信息',
+      content: `用户名：${record.userName} 性别:${record.sex === 1 ? "男" : "女"} 生日:${record.birthday}`
+    })
+  }
+
+  handleDelete = ()=>{
+    const _this = this
+    const {seleckItems, dataSource2} = this.state
+    let isDelete = seleckItems.length > 0 ? true : false
+    
+    Modal.info({ 
+      title:'提示',
+      content: isDelete ? '确定要删除吗' : '请选择要删除的选项',
+      onOk:() => {
+        // console.log(this.getTablist)
+        // isDelete ? this.getTablist() : false
+      }
+    })
     
   }
+  componentWillUnmount = () => {
+    this.setState = (state,callback)=>{
+      return;
+    };
+  }
   render() {
-    const { columns, dataSource, dataSource2 } = this.state
+    const { columns, dataSource, dataSource2, selectedRowKeys, selectedRowKeys2 } = this.state
+    const rowSelection = {
+      type: 'radio',
+      selectedRowKeys
+    }
+    const rowCheckSelection ={
+      type:'checkbox',
+      selectedRowKeys:selectedRowKeys2,
+      onChange:(keys,items)=>{
+        // console.log(items)
+        this.setState({
+          selectedRowKeys2:keys,
+          seleckItems:items // 选中的项
+        })
+      }
+    }
     return (
       <div>
         <Card title="基础表格">
@@ -134,18 +192,56 @@ class BasicTable extends Component {
           >
           </Table>
         </Card>
-        <Card 
+        <Card
           title="动态数据渲染表格-Mooc"
-          style={{ margin: '10px 0' }}
+          className="mg10_0"
+        >
+          <Table
+            bordered
+            dataSource={dataSource2}
+            columns={columns}
+            pagination={false}
           >
-            <Table
-              bordered
-              dataSource= {dataSource2}
-              columns={ columns }
-              pagination={false}
-            >
 
-            </Table>
+          </Table>
+        </Card>
+        <Card
+          title="Mooc-单选"
+          className="mg10_0"
+        >
+          <Table
+            bordered
+            columns={columns}
+            rowSelection={rowSelection}
+            dataSource={dataSource2}
+            pagination={false}
+            onRow={(recode, index) => ({
+              onClick: () => {
+                this.onRowClick(recode, index)
+              }
+            })
+            }
+          >
+          </Table>
+        </Card>
+        <Card
+          title="Mooc-多选"
+          className="mg10_0"
+        >
+          <div>
+            <Button onClick={this.handleDelete}
+              className="mg10_0"
+            >删除</Button>
+          </div>
+          <Table
+            bordered
+            columns={columns}
+            rowSelection={rowCheckSelection}
+            dataSource={dataSource2}
+            pagination={false}
+          >
+
+          </Table>
         </Card>
       </div>
     )

@@ -10,7 +10,8 @@ class Header extends Component {
     this.state = {
       userName:'aloneWang',
       city:'合肥',
-      weather_data:{}
+      weather_data:{},
+      timer: null
     }
   }
   handleLogout() {
@@ -26,13 +27,19 @@ class Header extends Component {
   }
 
   componentWillMount() {
-    setInterval(() => {
+    this.state.timer = setInterval(() => {
       let timeNow = moment().format('YYYY MM Do, h:mm:ss a')
       this.setState({
         timeNow
       })
     }, 1000);
     this.getWeather()
+  }
+  componentWillUnmount(){
+    //组件销毁后
+    // this.state = null
+    console.log("即将销毁")
+    clearInterval(this.state.timer)
   }
   render(){
     return(
