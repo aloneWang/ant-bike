@@ -1,6 +1,9 @@
 import React, { Component } from 'react'
-import { Row, Col } from 'antd'
+import { connect } from 'react-redux'
+import { Row, Col, Modal } from 'antd'
 import moment from 'moment'
+import { setToken } from '@/store/actionCreate'
+import MenuConfig from '@/resource/menu'
 import { apiGetWeather } from '@/api'
 import './index.less'
 
@@ -11,13 +14,38 @@ class Header extends Component {
       userName:'aloneWang',
       city:'合肥',
       weather_data:{},
-      timer: null
+      timer: null,
+      title: ''
     }
   }
-  handleLogout() {
-    console.log("111111")
+  handleLogout(type) {
+    const { dispatch } = this.props
+    Modal[type]({
+      title:'提示',
+      content:'你确定要退出吗',
+      onOk:()=>{
+        // localStorage.removeItem('token');
+        // localStorage存的值得类型都是string类型
+        dispatch(setToken(''))
+      }
+    })
   }
+  componentWillUpdate(){
+    this.checkTitle(MenuConfig)
+  }
+  checkTitle(menu){
+    const pathname = window.location.pathname
 
+    return menu.forEach(item => {
+     if(item.children){
+       return this.checkTitle(item.children)
+     }else{
+      //  item.key === pathname && this.setState({title:item.title}) 
+      item.key === pathname && ( this.state.title = item.title)
+      
+     }
+    })
+  }
   async getWeather() {
     let city = this.state.city
     const res =   await apiGetWeather(city)
@@ -33,6 +61,7 @@ class Header extends Component {
         timeNow
       })
     }, 1000);
+    this.checkTitle(MenuConfig)
     this.getWeather()
   }
   componentWillUnmount(){
@@ -42,6 +71,7 @@ class Header extends Component {
     clearInterval(this.state.timer)
   }
   render(){
+
     return(
       <div className="header">
         <Row className="header-top">
@@ -54,7 +84,7 @@ class Header extends Component {
         </Row>
         <Row className='breadcrumb'>
             <Col span={4} className='breadcrumb-title'>
-                djskjdksdsd
+                { this.state.title}
             </Col>
             <Col span={20} className='weather'>
                 <span className='date'>{ this.state.timeNow }</span>
@@ -74,4 +104,7 @@ class Header extends Component {
   }
 }
 
-export default Header
+const mapState = state => ({
+  title: state.title
+})
+export default connect(mapState,null)(Header)

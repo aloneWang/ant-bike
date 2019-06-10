@@ -9,7 +9,8 @@ class BasicTable extends Component {
     this.state = {
       selectedRowKeys: [],
       selectedRowKeys2:[],
-      seleckItems:[]
+      seleckItems:[],
+      pagination:{}
     }
   }
 
@@ -119,16 +120,23 @@ class BasicTable extends Component {
       dataSource,
     })
   }
-  async getTablist() {
-    const res = await apiGetTableList()
- 
+  async getTablist(page = 1) {
+    const res = await apiGetTableList({page})
+    let pagination = {
+      total: 200,
+      pageSize: 6,
+      onChange:(page)=>{
+        this.getTablist(page)
+      }
+    }
     if (res && res.code == 0) {
       const dataSource2 = res.result.list
       dataSource2.map(item => {
         item.key = item.userName
       })
       this.setState({
-        dataSource2
+        dataSource2,
+        pagination
       })
     }
 
@@ -164,7 +172,7 @@ class BasicTable extends Component {
     };
   }
   render() {
-    const { columns, dataSource, dataSource2, selectedRowKeys, selectedRowKeys2 } = this.state
+    const { columns, dataSource, dataSource2, selectedRowKeys, selectedRowKeys2, pagination } = this.state
     const rowSelection = {
       type: 'radio',
       selectedRowKeys
@@ -237,7 +245,9 @@ class BasicTable extends Component {
             columns={columns}
             rowSelection={rowCheckSelection}
             dataSource={dataSource2}
-            pagination={false}
+            pagination={{
+              ...pagination
+            }}
           >
 
           </Table>

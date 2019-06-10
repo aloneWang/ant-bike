@@ -57,17 +57,17 @@ const menuList = [
 	},
 	{
 		title: '表格',
-		key: '/table',
-		children: [
-			{
-				title: '基础表格',
-				key: '/table/basic'
-			},
-			{
-				title: '高级表格',
-				key: '/table/high'
-			}
-		]
+		key: '/table/basic',
+		// children: [
+		// 	{
+		// 		title: '基础表格',
+		// 		key: '/table/basic'
+		// 	},
+		// 	{
+		// 		title: '高级表格',
+		// 		key: '/table/high'
+		// 	}
+		// ]
 	},
 	{
 		title: '富文本',

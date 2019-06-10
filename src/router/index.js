@@ -43,7 +43,7 @@ class Router extends Component {
                   <Redirect to='/home' />
                 </Switch>
               </Admin>
-            )} />
+              )}/>
 
           </Switch>
         </BrowserRouter>

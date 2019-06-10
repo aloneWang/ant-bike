@@ -17,6 +17,12 @@ export default (state = defaultState, action) => {
         ...state,
         isLoading: action.data
       }
+    case actionType.SELECT_MENU: 
+      console.log(action.data)
+      return{
+        ...state,
+        ...action.data
+      }
     default:
       return state
   }

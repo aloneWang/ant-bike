@@ -156,8 +156,12 @@ class FormRegister extends Component {
             <FormItem label="生日">
               {
                 getFieldDecorator('birthday',{
-                  initialValue: moment('1997-7-18'),
-                })(<DatePicker showTime placeholder="Select Time" />)
+                  initialValue: moment('1997-07-18')
+                })(
+                  <DatePicker
+                  showTime
+                  format='YYYY-MM-DD HH:mm:ss' />
+                )
               }
             </FormItem>
             <FormItem label="联系地址">

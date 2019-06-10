@@ -1,21 +1,29 @@
 import React, { Component, Fragment } from 'react'
 import { Menu, Icon } from 'antd'
+import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import MenuConfig from '@/resource/menu'
+import { selctMenu } from '@/store/actionCreate'
 
 import './index.less'
 
 
 class NavLeft extends Component {
   state = {
-    menuNode:''
+    menuNode:'',
+    // currentKey:window.location.pathname
   }
-  componentDidMount(){
+  componentWillMount(){
     const menuNode = this.renderMenu(MenuConfig)
     this.setState({
-      menuNode
+      menuNode,
     })
   }
+  // componentWillUpdate(){
+  //   console.log(111222)
+  //   this.state.currentKey = window.location.pathname
+    
+  // }
   renderMenu(node) {
 
     return node.map( item => {
@@ -33,9 +41,18 @@ class NavLeft extends Component {
          </Menu.Item>)
     })
   }
-  handleSelectedMenuItem(){}
-  handleChangeMenu(){}
+  _selectMenu(item){
+    const { dispatch } = this.props
+    console.log(item)
+    dispatch(selctMenu({
+      title:item.item.props.title,
+      key: item.keyPath
+    }))
+
+  }
   render() {
+    const { currentKey } = this.props
+    console.log(currentKey)
     return (
       <Fragment>
         <div className="logo">
@@ -43,14 +60,17 @@ class NavLeft extends Component {
           <h1>Imooc MS</h1>
         </div>
         <Menu 
-           onSelect={this.handleSelectedMenuItem}
-           onClick={this.handleChangeMenu}
-           theme='dark'>
+          selectedKeys={currentKey}
+          onSelect={ item => this._selectMenu(item)}
+          theme='dark'>
           {this.state.menuNode}
         </Menu>
       </Fragment>
     )
   }
 }
+const mapState = state =>({
+  currentKey: state.key || [window.location.pathname]
+})
 
-export default NavLeft
+export default connect(mapState,null)(NavLeft)

@@ -7,6 +7,7 @@ import { Redirect, withRouter } from 'react-router-dom'
 import Header from '@/components/header'
 import NavLeft from '@/components/navLeft'
 import Footer from '@/components/footer'
+import  { upDateTitle } from '@/store/actionCreate'
 import '@/assets/css/common.less'
 
 
@@ -50,4 +51,7 @@ class Admin extends Component {
 const mapState = (state) => ({
   token: state.token
 })
-export default connect(mapState,null)(Admin)
+// const mapDispatch = ((dispatch)=>{
+//   dispatch(upDateTitle)
+// })
+export default connect(mapState,null)(withRouter(Admin))
