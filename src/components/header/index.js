@@ -49,7 +49,7 @@ class Header extends Component {
   async getWeather() {
     let city = this.state.city
     const res =   await apiGetWeather(city)
-    this.setState({
+    res && this.setState({
       weather_data: res.results[0].weather_data[0]
     })
   }
