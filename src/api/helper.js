@@ -35,12 +35,14 @@ export function Jsonp(url) {
  return new Promise( (resolve,reject) => {
 
   jsonp(url,'callback',(err,res)=>{
-    if(res.status === 'success') {
+    if(res && res.status === 'success') {
       resolve(res)
     }else{
       reject(err)
     }
   })
+ }).catch(err =>{
+   console.log(err)
  })
 
 }

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { message } from 'antd'
 import store from '@/store'
 import * as actionType from '@/store/actionType'
 
@@ -27,6 +28,8 @@ instance.interceptors.request.use( config => {
         type: actionType.SET_TOKEN,
         data: null
       })
+      // 增加消息弹窗
+      message.error('token失效了,请重新登录！');
       return Promise.reject("token失效了")
     }
   }

@@ -13,7 +13,7 @@ class Header extends Component {
     this.state = {
       userName:'aloneWang',
       city:'合肥',
-      weather_data:{},
+      weather_data:'',
       timer: null,
       title: ''
     }
@@ -91,12 +91,19 @@ class Header extends Component {
                 <span className='weather-detail'>
                     { this.state.city }
                 </span>
-                <span className='weather-img'>
-                    <img src={ this.state.weather_data.dayPictureUrl } alt='天气图片' />
-                </span>
-                <span className='weather-detail'>
-                    { this.state.weather_data.weather+'/'+ this.state.weather_data.temperature} 
-                </span>
+                {
+                  this.state.weather_data && (
+                    <div>
+                      <span className='weather-img'>
+                        <img src={ this.state.weather_data.dayPictureUrl } alt='天气图片' />
+                      </span>
+                      <span className='weather-detail'>
+                          { this.state.weather_data.weather+'/'+ this.state.weather_data.temperature} 
+                      </span>
+                  </div>
+                  )
+                }
+                
             </Col>
         </Row>
       </div>
